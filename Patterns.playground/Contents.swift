@@ -71,29 +71,43 @@ class Edit {
 
 //Facade
 
-class VideoFile {}
+class VideoFile {
+    let fileName: String
+    
+    init(fileName: String) {
+        self.fileName = fileName
+    }
+}
 
 class OggCompressionCodec {}
 
 class MPEG4CompressionCodec {}
 
 class Converter {
-    func convert(filename: String, format: String) {
-        var file = VideoFile()
+    
+    enum Formats {
+        case mp4, ogg
+    }
+    
+    func convert(fileName: String, format: Formats) {
+        var file = VideoFile(fileName: "filename")
         print("Created file \(file)")
         
-        if (format == "mp4") {
-            var destinationCodec = MPEG4CompressionCodec()
-            print("Converting to mp4")
-        } else {
-            var destinationCodec = OggCompressionCodec()
-            print("Converting to ogg")
+        switch format {
+            case .mp4:
+                print("Converting to mp4")
+                var destinationCodec = MPEG4CompressionCodec()
+            case .ogg:
+                print("Converting to ogg")
+                var destinationCodec = OggCompressionCodec()
+            default:
+                print("Not appropriate format")
         }
     }
 }
 
 var video = Converter()
-video.convert(filename: "Test", format: "mp4")
+video.convert(fileName: "Test", format: .ogg)
 
 
 
