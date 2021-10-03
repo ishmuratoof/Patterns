@@ -1,4 +1,4 @@
-//Factory method
+//MARK: Factory method
 
 protocol FactoryMethod {
     func transportGenerator() -> Transport
@@ -26,50 +26,70 @@ class Airplane: FactoryMethod {
     }
 }
 
-//State
+//MARK: State
 
-class State {
-    private var state: String
+//State protocol
+
+protocol State {
+    func someAction()
+    func anotherAction()
+}
+
+// Context class
+
+class Context {
+    private var state: State
     
-    init(state: String) {
+    init(state: State) {
         self.state = state
     }
     
-    func updateState(state: String) {
-        print("Updating state to \(state)")
-        self.state = state
+    func transition(to state: State) { }
+    
+    func firstRequest() {
+        state.someAction()
+    }
+    
+    func secondRequest() {
+        state.anotherAction()
     }
 }
 
-class Create {
-    private var document: String
-    private var state = State(state: "")
+// Basic state class
+
+class BasicState: State {
+    weak var context: Context?
+        
+    func someAction() {}
     
-    init(document: String) {
-        self.document = document
-    }
-    
-    func createDocument() {
-        print("Creating a document")
-        state.updateState(state: "Created")
+    func anotherAction() {}
+}
+
+// First state class
+
+class State1: BasicState {
+    override func someAction() {
+        print("State 1 makes first request and switches to the second state")
+        context?.transition(to: State2())
     }
 }
 
-class Edit {
-    private var document: String
-    private var state = State(state: "")
-    
-    init(document: String) {
-        self.document = document
-    }
-    
-    func editDocument() {
-        print("Editing a document")
-        state.updateState(state: "edited")
+// Second state class
+
+class State2: BasicState {
+    override func someAction() {
+        print("State 2 makes first request and switches to the first state")
+        context?.transition(to: State1())
     }
 }
 
-//Facade
+
+
+
+
+//MARK: Facade
+
+//Some external classes
 
 class VideoFile {
     let fileName: String
@@ -83,25 +103,30 @@ class OggCompressionCodec {}
 
 class MPEG4CompressionCodec {}
 
+//My own class that's allows to work with other classes
+
 class Converter {
     
+    //Enumeration of available audio formats
+    
     enum Formats {
-        case mp4, ogg
+        case mp4
+        case ogg
     }
     
+    //Convererting method
+    
     func convert(fileName: String, format: Formats) {
-        var file = VideoFile(fileName: "filename")
+        let file = VideoFile(fileName: "Some filename")
         print("Created file \(file)")
         
         switch format {
             case .mp4:
                 print("Converting to mp4")
-                var destinationCodec = MPEG4CompressionCodec()
+                MPEG4CompressionCodec()
             case .ogg:
                 print("Converting to ogg")
-                var destinationCodec = OggCompressionCodec()
-            default:
-                print("Not appropriate format")
+                OggCompressionCodec()
         }
     }
 }
