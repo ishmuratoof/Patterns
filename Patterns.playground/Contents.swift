@@ -1,91 +1,77 @@
 //MARK: Factory method
 
-protocol FactoryMethod {
-    func transportGenerator() -> Transport
+protocol FactoryBuilding {
+    func makeTransport() -> TruckFactory
 }
 
-class Transport {
-    func someOperation() { }
+class TruckFactory {
+    func transporting() {}
 }
 
-class Truck: FactoryMethod {
-    func transportGenerator() -> Transport {
-        return Transport()
+class Truck: TruckFactory, FactoryBuilding {
+
+    func makeTransport() -> TruckFactory {
+        return TruckFactory()
     }
 }
 
-class Car: FactoryMethod {
-    func transportGenerator() -> Transport {
-        return Transport()
+class Car: TruckFactory, FactoryBuilding {
+    func makeTransport() -> TruckFactory {
+        return TruckFactory()
     }
 }
 
-class Airplane: FactoryMethod {
-    func transportGenerator() -> Transport {
-        return Transport()
+class Airplane: TruckFactory, FactoryBuilding {
+    func makeTransport() -> TruckFactory {
+        return TruckFactory()
     }
 }
 
 //MARK: State
 
-//State protocol
-
-protocol State {
-    func someAction()
-    func anotherAction()
-}
-
-// Context class
-
 class Context {
-    private var state: State
+    var state: State
     
     init(state: State) {
         self.state = state
     }
     
-    func transition(to state: State) { }
-    
-    func firstRequest() {
-        state.someAction()
-    }
-    
-    func secondRequest() {
-        state.anotherAction()
+    func transitionTo(state: State) {
+        self.state = state
     }
 }
 
-// Basic state class
+protocol State {
+    var context: Context? { get }
+    func changeLight()
+}
 
-class BasicState: State {
-    weak var context: Context?
+class RedState: State {
+    var context: Context?
+    
+    func changeLight() {
+        print("Changing light to yellow")
+        context?.transitionTo(state: YellowState())
+    }
+}
+
+class YellowState: State {
+    var context: Context?
         
-    func someAction() {}
+    func changeLight() {
+        print("Changing light to green")
+        context?.transitionTo(state: GreenState())
+    }
+}
+
+class GreenState: State {
+    var context: Context?
     
-    func anotherAction() {}
-}
-
-// First state class
-
-class State1: BasicState {
-    override func someAction() {
-        print("State 1 makes first request and switches to the second state")
-        context?.transition(to: State2())
+    func changeLight() {
+        print("Changing light to red")
+        context?.transitionTo(state: RedState())
     }
 }
-
-// Second state class
-
-class State2: BasicState {
-    override func someAction() {
-        print("State 2 makes first request and switches to the first state")
-        context?.transition(to: State1())
-    }
-}
-
-
-
-
 
 //MARK: Facade
 
