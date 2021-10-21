@@ -4,27 +4,33 @@ protocol FactoryBuilding {
     func makeTransport() -> TruckFactory
 }
 
-class TruckFactory {
-    func transporting() {}
+protocol TruckFactory {
+    func transporting()
 }
 
 class Truck: TruckFactory, FactoryBuilding {
-
+    
     func makeTransport() -> TruckFactory {
-        return TruckFactory()
+        return Truck()
     }
+    
+    func transporting() {}
 }
 
 class Car: TruckFactory, FactoryBuilding {
     func makeTransport() -> TruckFactory {
-        return TruckFactory()
+        return Car()
     }
+    
+    func transporting() {}
 }
 
 class Airplane: TruckFactory, FactoryBuilding {
     func makeTransport() -> TruckFactory {
-        return TruckFactory()
+       return Airplane()
     }
+    
+    func transporting() {}
 }
 
 //MARK: State
