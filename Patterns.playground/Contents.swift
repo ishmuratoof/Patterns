@@ -1,31 +1,40 @@
 //MARK: Factory method
 
-protocol FactoryBuilding {
-    func makeTransport() -> TruckFactory
+protocol TransportBuilding {
+    func makeTransport() -> Transport
 }
 
-class TruckFactory {
-    func transport() {
-        print("Do transport")
+protocol Transport {
+    func beep()
+}
+
+class Truck: TransportBuilding, Transport {
+    func beep() {
+        print("beep")
     }
-}
-
-class Truck: TruckFactory, FactoryBuilding {
     
-    func makeTransport() -> TruckFactory {
-        return TruckFactory()
+    func makeTransport() -> Transport {
+        return Truck()
     }
 }
 
-class Car: TruckFactory, FactoryBuilding {
-    func makeTransport() -> TruckFactory {
-        return TruckFactory()
+class Car: TransportBuilding, Transport {
+    func beep() {
+        print("beep")
+    }
+    
+    func makeTransport() -> Transport {
+        return Car()
     }
 }
 
-class Airplane: TruckFactory, FactoryBuilding {
-    func makeTransport() -> TruckFactory {
-       return TruckFactory()
+class Airplane: TransportBuilding, Transport {
+    func beep() {
+        print("beep")
+    }
+    
+    func makeTransport() -> Transport {
+        return Airplane()
     }
 }
 
