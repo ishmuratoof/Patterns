@@ -5,36 +5,30 @@ protocol TransportBuilding {
 }
 
 protocol Transport {
-    func beep()
+    func beep() -> String
 }
 
-class Truck: TransportBuilding, Transport {
-    func beep() {
-        print("beep")
-    }
-    
-    func makeTransport() -> Transport {
+class TruckCreator: TransportBuilding {
+    public func makeTransport() -> Transport {
         return Truck()
     }
 }
 
-class Car: TransportBuilding, Transport {
-    func beep() {
-        print("beep")
-    }
-    
+class TrainCreator: TransportBuilding {
     func makeTransport() -> Transport {
-        return Car()
+        return Train()
     }
 }
 
-class Airplane: TransportBuilding, Transport {
-    func beep() {
-        print("beep")
+class Truck: Transport {
+    func beep() -> String {
+        return "Beep"
     }
-    
-    func makeTransport() -> Transport {
-        return Airplane()
+}
+
+class Train: Transport {
+    func beep() -> String {
+        return "Beep"
     }
 }
 
