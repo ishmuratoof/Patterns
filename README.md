@@ -1,5 +1,5 @@
-# Learning patterns
+# Patterns example
 
-* Factory method
+* Factory
 * State
 * Facade
